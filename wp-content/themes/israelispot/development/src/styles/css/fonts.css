@@ -1,0 +1,43 @@
+@font-face {
+    font-family: 'AlmoniDLAAA-900';
+    src: url('../fonts/AlmoniDLAAA-900.woff') format('woff'),
+    url('../fonts/AlmoniDLAAA-900.ttf') format('truetype');
+    src: url('../fonts/AlmoniDLAAA-900.eot');
+    src: url('../fonts/AlmoniDLAAA-900.woff2') format('woff2'),
+    url('../fonts/AlmoniDLAAA-900.eot?#iefix') format('embedded-opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'AlmoniDLAAA-700';
+    src: url('../fonts/AlmoniDLAAA-700.woff') format('woff'),
+    url('../fonts/AlmoniDLAAA-700.ttf') format('truetype');
+    src: url('../fonts/AlmoniDLAAA-700.eot');
+    src: url('../fonts/AlmoniDLAAA-700.woff2') format('woff2'),
+    url('../fonts/AlmoniDLAAA-700.eot?#iefix') format('embedded-opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'AlmoniDLAAA-400';
+    src: url('../fonts/AlmoniDLAAA-400.woff') format('woff'),
+    url('../fonts/AlmoniDLAAA-400.ttf') format('truetype');
+    src: url('../fonts/AlmoniDLAAA-400.eot');
+    src: url('../fonts/AlmoniDLAAA-400.woff2') format('woff2'),
+    url('../fonts/AlmoniDLAAA-400?#iefix') format('embedded-opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'AlmoniDLAAA-300';
+    src: url('../fonts/AlmoniDLAAA-300.woff') format('woff'),
+    url('../fonts/AlmoniDLAAA-300.ttf') format('truetype');
+    src: url('../fonts/AlmoniDLAAA-300.eot');
+    src: url('../fonts/AlmoniDLAAA-300.woff2') format('woff2'),
+    url('../fonts/AlmoniDLAAA-300?#iefix') format('embedded-opentype');
+    font-weight: normal;
+    font-style: normal;
+}

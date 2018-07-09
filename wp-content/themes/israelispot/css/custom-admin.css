@@ -1,0 +1,33 @@
+.admin-stats__list{
+}
+.admin-stats__item{
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid #006799;
+}
+.admin-stats__item:first-child {
+    border-bottom: 2px solid rgb(252, 68, 87);
+}
+.admin-stats__item:last-child {
+    border-bottom: 0;
+}
+.admin-stats__name{
+    padding: 0 7px;
+    display: flex;
+    align-items: center;
+    flex-basis: calc(100% - 116px);
+}
+a.admin-stats__name:hover {
+    color: rgb(252, 68, 87);
+}
+.admin-stats__number{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-basis: 50px;
+}
+.admin-stats__number_person{
+    border-left: 1px solid #006799;
+    border-right: 1px solid #006799;
+}
