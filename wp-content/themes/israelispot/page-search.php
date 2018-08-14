@@ -1,5 +1,9 @@
 <?php /* Template Name: Search */
 get_header();
+
+isset($_GET['id']) ? $getId = $_GET['id'] : $getId = false;
+isset($_GET['favorites']) ? $getfavorites = $_GET['favorites'] : $getfavorites = false;
+
 if(get_locale() == 'en_GB') {
     $direction = 'right';
     $lang = 'en';
@@ -7,11 +11,15 @@ if(get_locale() == 'en_GB') {
     $direction = 'left';
     $lang = 'he';
 };
+$start = microtime(true);
 
 ?>
 <div id="search-filter"></div>
+
+
+
 <?php
-    if($_GET['id']){
+    if($getId){
         if($_GET['id'] != 'nothing'){
             $args = array(
                 'numberposts'   => -1,
@@ -22,7 +30,7 @@ if(get_locale() == 'en_GB') {
         } else {
             $args = [];
         }
-    } else if($_GET['favorites'] == 'true') {
+    } else if($getfavorites == 'true') {
         $favorites = [];
         if(get_field('favorite_activities', 'user_'.get_current_user_id())) {
             foreach (get_field('favorite_activities', 'user_'.get_current_user_id()) as $fav){
@@ -79,7 +87,7 @@ if(get_locale() == 'en_GB') {
         }
     }
 ?>
-
+<!-- --><?php //echo "<!--microtime after foreach".round(microtime(true) - $start, 4).' sek-->'; ?>
 <script type="text/babel">
 
     <?php
@@ -97,16 +105,17 @@ if(get_locale() == 'en_GB') {
             $userFav = 0;
         }
     ?>
-
+<!--    --><?php //echo "/*microtime after is_user_logged_in".round(microtime(true) - $start, 4).' sek*/'; ?>
     var logged = '<?php echo is_user_logged_in(); ?>';
     var userFav = '<?php echo json_encode($userFav); ?>';
-
+<!--    --><?php //echo "/*microtime before Activities".round(microtime(true) - $start, 4).' sek*/'; ?>
     var Activities = [
         <?php foreach ($activities as $post) :
-        if(get_field('price', $post)){
-            $price = get_field('price', $post);
+        $post_id = $post->ID;
+        if(get_field('price', $post_id)){
+            $price = get_field('price', $post_id);
 
-        } else if (get_field('price', $post) === '0'){
+        } else if (get_field('price', $post_id) === '0'){
             $price = 0;
         } else {
             $price = '';
@@ -133,22 +142,27 @@ if(get_locale() == 'en_GB') {
             }
         }
 
-        $attraction = get_field('attraction', $post);
+        $attraction = get_field('attraction', $post_id);
+
+
+
 
         $tagsAttractionNames = [];
 
         if($attraction){
+            $attractionID = $attraction->ID;
             $attractionLink = esc_js(get_permalink($attraction));
             $guide = $attraction->post_title;
-            $location = get_field('location', $attraction);
-            $image = get_the_post_thumbnail_url( $attraction->ID, 'medium');
-            $tags = get_the_terms($attraction, 'attraction_tags');
+            $location = get_field('location', $attractionID);
+            $image = get_the_post_thumbnail_url( $attractionID, 'medium');
+            $tags = get_the_terms($attractionID, 'attraction_tags');
             if($tags){
                 foreach ($tags as $tag) {
                     $tagsAttractionNames[] = $tag->name;
                 }
             }
         } else {
+            $attractionID = false;
             $attractionLink = "";
             $guide = "";
             $location = "";
@@ -156,7 +170,7 @@ if(get_locale() == 'en_GB') {
             $tagsAttractionNames= [];
         }
 
-        $categories = get_the_terms($attraction, 'attraction_categories');
+        $categories = get_the_terms($attractionID, 'attraction_categories');
         $categoriesNames = [];
         if($categories){
             foreach ($categories as $category) {
@@ -164,7 +178,7 @@ if(get_locale() == 'en_GB') {
             }
         }
 
-        $mainCategory = new WPSEO_Primary_Term( 'attraction_categories', $attraction->ID );
+        $mainCategory = new WPSEO_Primary_Term( 'attraction_categories', $attractionID );
         $mainCategory = $mainCategory->get_primary_term();
         $mainCategory = get_term( $mainCategory );
         $mainCategoryImage = get_field('map_icon', $mainCategory);
@@ -176,7 +190,7 @@ if(get_locale() == 'en_GB') {
         {
             id: <?php echo $post->ID; ?>,
             price: '<?php echo $price; ?>',
-            childPrice: '<?php the_field('child_price', $post); ?>',
+            childPrice: '<?php the_field('child_price', $post_id); ?>',
             currency: '<?php pll_e('NIS'); ?>',
             rating: '<?php echo $rating; ?>',
             region: '<?php echo $location; ?>',
@@ -189,26 +203,26 @@ if(get_locale() == 'en_GB') {
             link: '<?php echo esc_js(get_permalink($post)); ?>',            
 			excerpt: '<?php echo esc_js(wp_trim_words(get_the_excerpt($post), 15, '...')); ?>',
             image: '<?php echo get_the_post_thumbnail_url($post, 'medium') ?>',
-            lat: '<?php echo get_field('map', $attraction)['lat']; ?>',
-            lng: '<?php echo get_field('map', $attraction)['lng']; ?>',
+            lat: '<?php echo get_field('map', $attractionID)['lat']; ?>',
+            lng: '<?php echo get_field('map', $attractionID)['lng']; ?>',
             tags: <?php echo json_encode($tagsNames); ?>,
             tagsAttraction: <?php echo json_encode($tagsAttractionNames); ?>,
             categories: <?php echo json_encode($categoriesNames); ?>,
             comments: <?php echo count($comments); ?>,
-            attractionId: <?php echo $attraction->ID; ?>
+            attractionId: <?php echo $attractionID; ?>
         },
         <?php endforeach; ?>
     ];
-
+<!--    --><?php //echo "/*microtime Activities".round(microtime(true) - $start, 4).' sek*/'; ?>
     var Cooperations = [
         <?php foreach (get_field('cooperations_'.$lang, 'options') as $term): ?>
         {
           name: '<?php echo $term->name; ?>',
           image: '<?php echo get_field('image', $term)['url']; ?>'
         },
-        <?endforeach; ?>
+        <?php endforeach; ?>
     ];
-
+<!--    --><?php //echo "/*microtime after Cooperations".round(microtime(true) - $start, 4).' sek*/'; ?>
     var Params = {
         price: '<?php echo $_GET['price']; ?>',
         tag: '<?php echo $_GET['tag']; ?>',
@@ -216,7 +230,7 @@ if(get_locale() == 'en_GB') {
         region: '<?php echo $_GET['region']; ?>',
         cooperation: '<?php echo $_GET['cooperation']; ?>'
     };
-
+<!--    --><?php //echo "/*microtime after Params".round(microtime(true) - $start, 4).' sek*/'; ?>
     var ListItem = React.createClass({
         changeFavorite: function (event) {
             event.preventDefault();
@@ -382,7 +396,7 @@ if(get_locale() == 'en_GB') {
             return item;
         }
     });
-
+<!--    --><?php //echo "/*microtime after ListItem".round(microtime(true) - $start, 4).' sek*/'; ?>
     var SearchFilter = React.createClass({
         getInitialState: function () {
             var prices = [];
@@ -1751,7 +1765,7 @@ if(get_locale() == 'en_GB') {
                 bannerImages.push({
                     background: 'url('+'<?php echo wp_get_attachment_image_url( get_sub_field('image')["id"], $size); ?>'+') center / cover'
                 });
-            <? endwhile; ?>
+            <?php endwhile; ?>
             return(
                 <main className="search-main" onClick={this.handleClick}>
                     <section className="home-second-menu home-second-menu_search">
@@ -1939,7 +1953,7 @@ if(get_locale() == 'en_GB') {
         }
     });
 
-
+<!--    --><?php //echo "/*microtime after SearchFilter".round(microtime(true) - $start, 4).' sek*/'; ?>
     ReactDOM.render(
         <div>
             <SearchFilter />
@@ -1947,5 +1961,5 @@ if(get_locale() == 'en_GB') {
         document.getElementById('search-filter')
     );
 </script>
-
+<?php //echo "<!--microtime after script".round(microtime(true) - $start, 4).' sek-->'; ?>
 <?php get_footer(); ?>

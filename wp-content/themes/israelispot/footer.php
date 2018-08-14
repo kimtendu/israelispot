@@ -35,6 +35,8 @@ if(get_locale() == 'en_GB') {
 	</div>
 </footer>
 
+<div class="fb-like" data-href="https://www.facebook.com/israelispot/" data-layout="box_count" data-action="like" data-size="small" data-show-faces="false" data-share="false"></div>
+
 <?php wp_footer(); ?>
 
 </body>

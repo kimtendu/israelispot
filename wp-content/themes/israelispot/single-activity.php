@@ -48,6 +48,7 @@ while ( have_posts() ) : the_post(); ?>
                     <?php the_excerpt(); ?>
                 </section>
                 <section class="home-activities__rating home-activities__rating_activity">
+					
                     <?php
                     $rating = 'default';
                     $attraction = get_field('attraction');
@@ -260,6 +261,7 @@ while ( have_posts() ) : the_post(); ?>
                     </section>
                     <?php endif; ?>
                 </div>
+				
             </section>
         </div>
     </div>
@@ -293,6 +295,8 @@ while ( have_posts() ) : the_post(); ?>
             <?php endif; ?>
 
             <section class="custom-content custom-content_activity">
+				<div class="fb-like" data-href="<?php echo get_permalink( $post, false ); ?>" data-width="320" data-layout="standard" data-action="like" data-size="small" data-show-faces="true" data-share="true"></div>
+					<hr/>
                 <?php the_content(); ?>
             </section>
             <?php

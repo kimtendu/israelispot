@@ -4,7 +4,7 @@ if(get_locale() == 'en_GB') {
 } else {
 	$lang = 'he';
 };
-
+$ID = get_the_ID();
 
 ?>
 <!doctype html>
@@ -14,10 +14,19 @@ if(get_locale() == 'en_GB') {
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<?php wp_head(); ?>
+	
+	<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/he_IL/sdk.js#xfbml=1&version=v3.1&appId=197512843706590&autoLogAppEvents=1';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
 </head>
 
 <body <?php body_class(); ?>>
-<header class="<?php if (is_front_page()) echo 'home'; ?> <?php if (!is_front_page() && !is_404()) echo 'not-home'; ?> <?php if (get_page_template_slug() == 'page-search.php') echo 'search'; ?>">
+<header class="<?php if (is_front_page()) echo 'home'; ?> <?php if (!is_front_page() && !is_404()) echo 'not-home'; ?> <?php if (get_page_template_slug() == 'page-search-js.php') echo 'search'; ?>">
 	<div class="wrap wrap_big">
 		<section class="s-one">
 			<?php
@@ -56,7 +65,7 @@ if(get_locale() == 'en_GB') {
                     </svg>
                 </button>
             </div>
-            <?php if(get_page_template_slug($ID) != 'page-search.php') : ?>
+            <?php if(get_page_template_slug($ID) != 'page-search-js.php') : ?>
                 <section class="home-second-menu">
                     <ul class="home-second-menu__list">
                         <li class="home-second-menu__item home-second-menu__item_title">
@@ -66,10 +75,11 @@ if(get_locale() == 'en_GB') {
                         $page = get_pages(
                             array(
                                 'meta_key' => '_wp_page_template',
-                                'meta_value' => 'page-search.php'
+                                'meta_value' => 'page-search-js.php'
                             )
                         );
-                        foreach (get_field('cooperations_'.$lang, 'options') as $term): ?>
+						
+                        foreach (get_field('cooperations_'.$lang, 'options') as $term): ?>							
                             <li class="home-second-menu__item home-second-menu__item_cop">
                                 <a href="<?php echo get_permalink($page[0]).'?cooperation='.$term->name; ?>" class="home-second-menu__link"><?php echo $term->name; ?></a>
                             </li>
