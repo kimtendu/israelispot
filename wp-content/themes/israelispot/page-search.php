@@ -23,7 +23,7 @@ $start = microtime(true);
         if($_GET['id'] != 'nothing'){
             $args = array(
                 'numberposts'   => -1,
-                'post_type'     => 'activity',
+                'post_type'     => 'product',
                 'post__in'      => json_decode($_GET['id']),
                 'orderby'       => 'rand'
             );
@@ -38,7 +38,7 @@ $start = microtime(true);
             }
             $args = array(
                 'numberposts'   => -1,
-                'post_type'     => 'activity',
+                'post_type'     => 'product',
                 'post__in'      => $favorites,
                 'lang'          => $lang,
                 'orderby'       => 'rand'
@@ -51,7 +51,7 @@ $start = microtime(true);
     } else {
         $args = array(
             'numberposts'   => -1,
-            'post_type'        => 'activity',
+            'post_type'        => 'product',
             'orderby'          => 'rand'
         );
     }
@@ -59,6 +59,9 @@ $start = microtime(true);
     $allPosts = get_posts( $args );
     $posts = [];
     $today = date('Ymd');
+
+    echo "<!--microtime get_posts".round(microtime(true) - $start, 4).' sek-->';
+
 
     foreach ($allPosts as $allPost){
         if(get_field('date', $allPost)){
@@ -87,7 +90,7 @@ $start = microtime(true);
         }
     }
 ?>
-<!-- --><?php //echo "<!--microtime after foreach".round(microtime(true) - $start, 4).' sek-->'; ?>
+ <?php echo "<!--microtime after foreach".round(microtime(true) - $start, 4).' sek-->'; ?>
 <script type="text/babel">
 
     <?php
@@ -105,10 +108,10 @@ $start = microtime(true);
             $userFav = 0;
         }
     ?>
-<!--    --><?php //echo "/*microtime after is_user_logged_in".round(microtime(true) - $start, 4).' sek*/'; ?>
+    <?php echo "/*microtime after is_user_logged_in".round(microtime(true) - $start, 4).' sek*/'; ?>
     var logged = '<?php echo is_user_logged_in(); ?>';
     var userFav = '<?php echo json_encode($userFav); ?>';
-<!--    --><?php //echo "/*microtime before Activities".round(microtime(true) - $start, 4).' sek*/'; ?>
+    <?php echo "/*microtime before Activities".round(microtime(true) - $start, 4).' sek*/'; ?>
     var Activities = [
         <?php foreach ($activities as $post) :
         $post_id = $post->ID;
@@ -142,6 +145,7 @@ $start = microtime(true);
             }
         }
 
+        echo "/*microtime Activities before attraction ".round(microtime(true) - $start, 4).' sek*/';
         $attraction = get_field('attraction', $post_id);
 
 
@@ -169,7 +173,7 @@ $start = microtime(true);
             $image = "";
             $tagsAttractionNames= [];
         }
-
+        echo "/*microtime Activities attraction ".round(microtime(true) - $start, 4).' sek*/';
         $categories = get_the_terms($attractionID, 'attraction_categories');
         $categoriesNames = [];
         if($categories){
@@ -177,7 +181,7 @@ $start = microtime(true);
                 $categoriesNames[] = $category->name;
             }
         }
-
+        echo "/*microtime Activities categories ".round(microtime(true) - $start, 4).' sek*/';
         $mainCategory = new WPSEO_Primary_Term( 'attraction_categories', $attractionID );
         $mainCategory = $mainCategory->get_primary_term();
         $mainCategory = get_term( $mainCategory );
@@ -213,7 +217,7 @@ $start = microtime(true);
         },
         <?php endforeach; ?>
     ];
-<!--    --><?php //echo "/*microtime Activities".round(microtime(true) - $start, 4).' sek*/'; ?>
+    <?php echo "/*microtime Activities".round(microtime(true) - $start, 4).' sek*/'; ?>
     var Cooperations = [
         <?php foreach (get_field('cooperations_'.$lang, 'options') as $term): ?>
         {
@@ -222,7 +226,7 @@ $start = microtime(true);
         },
         <?php endforeach; ?>
     ];
-<!--    --><?php //echo "/*microtime after Cooperations".round(microtime(true) - $start, 4).' sek*/'; ?>
+    <?php echo "/*microtime after Cooperations".round(microtime(true) - $start, 4).' sek*/'; ?>
     var Params = {
         price: '<?php echo $_GET['price']; ?>',
         tag: '<?php echo $_GET['tag']; ?>',
@@ -230,7 +234,7 @@ $start = microtime(true);
         region: '<?php echo $_GET['region']; ?>',
         cooperation: '<?php echo $_GET['cooperation']; ?>'
     };
-<!--    --><?php //echo "/*microtime after Params".round(microtime(true) - $start, 4).' sek*/'; ?>
+    <?php echo "/*microtime after Params".round(microtime(true) - $start, 4).' sek*/'; ?>
     var ListItem = React.createClass({
         changeFavorite: function (event) {
             event.preventDefault();
@@ -396,7 +400,7 @@ $start = microtime(true);
             return item;
         }
     });
-<!--    --><?php //echo "/*microtime after ListItem".round(microtime(true) - $start, 4).' sek*/'; ?>
+    <?php echo "/*microtime after ListItem".round(microtime(true) - $start, 4).' sek*/'; ?>
     var SearchFilter = React.createClass({
         getInitialState: function () {
             var prices = [];
@@ -1953,7 +1957,7 @@ $start = microtime(true);
         }
     });
 
-<!--    --><?php //echo "/*microtime after SearchFilter".round(microtime(true) - $start, 4).' sek*/'; ?>
+    <?php echo "/*microtime after SearchFilter".round(microtime(true) - $start, 4).' sek*/'; ?>
     ReactDOM.render(
         <div>
             <SearchFilter />
@@ -1961,5 +1965,5 @@ $start = microtime(true);
         document.getElementById('search-filter')
     );
 </script>
-<?php //echo "<!--microtime after script".round(microtime(true) - $start, 4).' sek-->'; ?>
+<?php echo "<!--microtime after script".round(microtime(true) - $start, 4).' sek-->'; ?>
 <?php get_footer(); ?>

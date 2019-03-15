@@ -10,30 +10,6 @@
 /**get activities fields
  */
 
-
-
-
-    
-add_action( 'wp_loaded', function() {
-    global $pagenow;
-    if(
-        defined( 'IN_MAINTENANCE' )
-        && IN_MAINTENANCE
-        && $pagenow !== 'wp-login.php'
-        && ! is_user_logged_in()
-    ) {
-        
-        header( 'HTTP/1.1 Service Unavailable', true, 503 );
-        header( 'Content-Type: text/html; charset=utf-8' );
-        header( 'Retry-After: 3600' );
-        if ( file_exists( ABSPATH . 'maintenance.php' ) ) {
-            require_once( ABSPATH . 'maintenance.php' );
-        }
-        
-    }
-});
-    
-
 require_once get_template_directory().'/fields/activities-fields.php';
 
 if (!function_exists('israelispot_setup')) :
@@ -253,10 +229,11 @@ function MySwitchUser($output)
 {
 
     //global $post is available here, hence you can check for the post type here
-    $users = get_users([ 'role__in' => [ 'subscriber', 'Subscriber pro', 'Administrator'] ] );
+    $users = get_users([ 'role__in' => [ 'subscriber', 'Subscriber pro'] ] );
     $output = "<select id=\"post_author_override\" name=\"post_author_override\" class=\"\">";
-    global $post;
-    
+
+    //Leave the admin in the list
+    $output .= "<option value=\"1\">Admin</option>";
     foreach($users as $user)
     {
         $sel = ($post->post_author == $user->ID)?"selected='selected'":'';
@@ -1877,16 +1854,123 @@ function child_remove_mr_tailor_do_footer() {
 }
 
 
-function adding_custom_data_in_order_items_meta($cart_item_data, $product_id, $variation_id) {
 
-    if (isset($_GET['tickets_amount_child'])) {
-        $label = $_GET['tickets_amount_child'];
-        $cart_item_data["quantity_child"] = $label;
-        return $cart_item_data;
-    }
+
+
+
+
+//function ipe_product_custom_price() {
+//
+    // select ID
+//   $product_id = $_GET['add-to-cart'];
+//    $tickets_amount_child = $_GET['tickets_amount_child'];
+//    //die(var_dump($product_id));
+//
+//    if( isset( $_GET['child_price'] ) && !empty($_GET['child_price'])) {
+//
+//            $cart_item_data[ "child_price" ] = $_GET['child_price'];
+//        }
+//        return $cart_item_data;
+//
+//
+//
+//    add_filter( 'woocommerce_add_cart_item_data', 'ipe_product_custom_price', 99, 2 );
+
+
+
+
+//function ipe_apply_custom_price_to_cart_item( $cart_object ) {
+//        if( !WC()->session->__isset( "reload_checkout" )) {
+//
+//            foreach ( $cart_object->cart_contents as $key => $value ) {
+//                if( isset( $value["child_price"] ) ) {
+//                    $value['data']->price = 3;
+//
+//                }
+//            }
+//        }
+//    }
+//
+//    add_action( 'woocommerce_before_calculate_totals', 'ipe_apply_custom_price_to_cart_item', 99 );
+ 
+
+
+
+
+
+//This captures additional posted information (all sent in one array)
+//
+//add_filter('woocommerce_add_cart_item_data','wdm_add_item_data',1,10);
+//function wdm_add_item_data($cart_item_data, $product_id) {
+//
+//    global $woocommerce;
+//    $new_value = array();
+//    $new_value['_custom_options'] = $_GET['child_price'];
+//
+//    if(empty($cart_item_data)) {
+//        return $new_value;
+//    } else {
+//        return array_merge($cart_item_data, $new_value);
+//    }
+//}
+////This captures the information from the previous function and attaches it to the item.
+//
+//add_filter('woocommerce_get_cart_item_from_session', 'wdm_get_cart_items_from_session', 1, 3 );
+//function wdm_get_cart_items_from_session($item,$values,$key) {
+//
+//    if (array_key_exists( '_custom_options', $values ) ) {
+//        $item['_custom_options'] = $values['_custom_options'];
+//    }
+//
+//    return $item;
+//}
+//
+////This displays extra information on basket & checkout from within the added info that was attached to the item.
+//add_filter('woocommerce_cart_item_name','add_usr_custom_session',1,3);
+//function add_usr_custom_session($product_name, $values, $cart_item_key ) {
+//
+//    $return_string = $product_name . "<br />" . $values['_custom_options']['description'];// . "<br />" . print_r($values['_custom_options']);
+//    return $return_string;
+//
+//}
+//
+////This adds the information as meta data so that it can be seen as part of the order (to hide any meta data from the customer just start it with an underscore)
+//add_action('woocommerce_add_order_item_meta','wdm_add_values_to_order_item_meta',1,2);
+//function wdm_add_values_to_order_item_meta($item_id, $values) {
+//    global $woocommerce,$wpdb;
+//
+//    wc_add_order_item_meta($item_id,'item_details',$values['_custom_options']['description']);
+//    wc_add_order_item_meta($item_id,'customer_image',$values['_custom_options']['another_example_field']);
+//    wc_add_order_item_meta($item_id,'_hidden_field',$values['_custom_options']['hidden_info']);
+//
+//}
+//
+////If you want to override the price you can use information saved against the product to do so
+//add_action( 'woocommerce_before_calculate_totals', 'update_custom_price', 1, 1 );
+//function update_custom_price( $cart_object ) {
+//    foreach ( $cart_object->cart_contents as $cart_item_key => $value ) {       
+//        // Version 2.x
+//        //$value['data']->price = $value['_custom_options']['custom_price'];
+//        // Version 3.x / 4.x
+//        $value['data']->set_price($value['_custom_options']['custom_price']);
+//    }
+//}
+//
+//
+//
+function adding_custom_data_in_order_items_meta( $cart_item_data, $product_id, $variation_id ) {
+//    if ( isset($_GET['tickets_amount_child'] )  ) {
+//    $label = $_GET["tickets_amount_child"];
+//    wc_add_order_item_meta($item_id, 'quantity_child', $_GET['tickets_amount_child'] );
+    $label = 100500;
+        $cart_item_data[ "quantity_child" ] = $label;
+    return $cart_item_data;
+
+//    }
 }
+add_action('woocommerce_add_cart_item_data','adding_custom_data_in_order_items_meta', 10, 3 );
 
-add_action('woocommerce_add_cart_item_data', 'adding_custom_data_in_order_items_meta', 10, 3);
+
 
 
 
@@ -1903,114 +1987,15 @@ function add_custom_price( $cart_obj ) {
 
     // Loop through cart items
     foreach ( $cart_obj->get_cart() as $cart_item ) {
-
-//        $productPrice =  get_post_meta($cart_item['product_id'],'_sale_price')[0] ? get_post_meta($cart_item['product_id'],'_sale_price')[0] : get_post_meta($cart_item['product_id'],'_regular_price')[0];
-
-//         $cart_item['data']->set_price( $productPrice );
-
-        $subtotal = change_item_subtotal(null,$cart_item, null );
-        $quantity = $cart_item['quantity'];
-        $product_price = $subtotal/$quantity;
-        $cart_item['data']->set_price($product_price);
-//        $cart_item['quantity'] = $quantity;
-
-
+                $cart_item['data']->set_price( 40 );
     }
- }
-
-function getChildrenPrice($id) {
-  $children_price = false;
-    if (get_post_meta($id, 'cgwc-children-price')) {
-        $children_price = get_post_meta($id, 'cgwc-children-price')[0];
-    } elseif ( get_the_terms( $id, 'child_price') ) {
-        $children_price =  get_post_meta($id, 'child_price')[0];
-    }
-
-    return $children_price;
-}
+ } 
+ 
 
 
-add_filter( 'woocommerce_cart_item_subtotal', 'change_item_subtotal', 10, 3);
-function change_item_subtotal( $subtotal, $cart_item = null, $cart_item_key = null) {
-    if ($cart_item) {
-        $children_price = getChildrenPrice($cart_item['product_id']);
-//        $children_price = get_post_meta($cart_item['product_id'], 'child_price')[0];
-        $productPrice = get_post_meta($cart_item['product_id'], '_sale_price')[0] ? get_post_meta($cart_item['product_id'], '_sale_price')[0] : get_post_meta($cart_item['product_id'], '_regular_price')[0];
-
-        $subtotal = $cart_item['quantity_child'] * $children_price + $cart_item['quantity'] * $productPrice;
-    }
-    return $subtotal;
-}
 
 
-#add_action('woocommerce_cart_subtotal', 'calculate_totals', 10, 1);
-
-function calculate_totals( $cart ){
-    if ( is_admin() && ! defined( 'DOING_AJAX' ) )
-        return;
-
-    if ( did_action( 'woocommerce_before_calculate_totals' ) >= 2 )
-        return;
-
-    foreach ( $cart->get_cart() as $key => $cart_item ) {
-        $subtotal = change_item_subtotal(null,$cart_item, null );
-        $quantity = $cart_item['quantity_child'] +  $cart_item['quantity'];
-        $product_price = $subtotal/$quantity;
-        $cart_item['data']->set_price($product_price);
-        $cart_item['quantity'] = $quantity;
-    }
-
-//your code
-}
-
-function cfwc_create_custom_field() {
-    $args = array(
-        'id' => 'cgwc-children-price',
-        'label' => __( 'Children price', 'cfwc' ),
-        'class' => 'cfwc-custom-field',
-        'desc_tip' => true,
-        'description' => __( 'Enter children prcie.', 'ctwc' ),
-    );
-    $args2 = array(
-        'id' => 'cgwc-children-sale-price',
-        'label' => __( 'Children sale price', 'cfwc' ),
-        'class' => 'cfwc-custom-field',
-        'desc_tip' => true,
-        'description' => __( 'Enter children sale prcie.', 'ctwc' ),
-    );
-    woocommerce_wp_text_input( $args);
-    woocommerce_wp_text_input( $args2 );
-}
-add_action( 'woocommerce_product_options_general_product_data', 'cfwc_create_custom_field' );
 
 
-/**
- * Save the custom field
- * @since 1.0.0
- */
-function cfwc_save_custom_field( $post_id ) {
-    $product = wc_get_product( $post_id );
-    $title = isset( $_POST['cgwc-children-price'] ) ? $_POST['cgwc-children-price'] : '';
-    $product->update_meta_data( 'cgwc-children-price', sanitize_text_field( $title ) );
-    $product->save();
-}
-add_action( 'woocommerce_process_product_meta', 'cfwc_save_custom_field' );
-
-/**
- * Add the text field as item data to the cart object
- * @since 1.0.0
- * @param Array 		$cart_item_data Cart item meta data.
- * @param Integer   $product_id     Product ID.
- * @param Integer   $variation_id   Variation ID.
- * @param Boolean  	$quantity   		Quantity
- */
-function cfwc_add_custom_field_item_data( $cart_item_data, $product_id, $variation_id, $quantity ) {
-    if( ! empty( $_POST['cgwc-children-price'] ) ) {
-        // Add the item data
-        $cart_item_data['cgwc-children-price'] = $_POST['cgwc-children-price'];
-    }
-    return $cart_item_data;
-}
-add_filter( 'woocommerce_add_cart_item_data', 'cfwc_add_custom_field_item_data', 10, 4 );
 
 //?quantity=1&add-to-cart=6031&custom_options=מבוגר&tickets_amount_child=1&child_price=&submit=

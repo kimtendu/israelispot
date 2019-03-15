@@ -9,7 +9,11 @@ if(get_locale() == 'en_GB') {
 <main class="custom-activity">
     <div class="wrap wrap_home">
         <?php if(is_user_logged_in()) : ?>
-            <?php if(get_field('attraction', 'user_'.get_current_user_id())) : ?>
+            <?php 
+		global $current_user;
+		$args = array('author'=>$current_user->ID, 'post_type'=>'attraction','posts_per_page' => 1 );
+		$current_user_attraction = get_posts($args);
+		if($current_user_attraction && !empty($current_user_attraction)) : ?>
             <h1 class="custom-activity__title"><?php pll_e('Add your activity'); ?></h1>
             <div class="custom-activity__container">
                 <?php

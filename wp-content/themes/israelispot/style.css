@@ -851,3 +851,7 @@ object {
 .gallery-caption {
 	display: block;
 }
+
+.modal .custom-content {
+    font-size: 1.3rem;
+}

@@ -1,4 +1,4 @@
-<?php /* Template Name: Search-JS */
+<?php /* Template Name: Search-JS-without-map */
 get_header();
 
 isset($_GET['id']) ? $getId = $_GET['id'] : $getId = false;
@@ -97,7 +97,7 @@ if ($getId) {
 
             Activities = data.Activities;
             Cooperations = data.Cooperations;
-            //console.log("data: " + data);
+            //console.log(data);
 
           function compareRandom(a, b) {
             return Math.random() - 0.5;
@@ -156,10 +156,10 @@ if ($getId) {
                 }
 
                 var mainStyle = {
-                  background: 'url('+this.props.image+') center / cover'
+                  background: this.props.image ? 'url('+this.props.image+') center / cover' : ""
                 };
                 var secondStyle = {
-                  background: 'url('+this.props.subImage+') center / cover'
+                  background: this.props.subImage ? 'url('+this.props.subImage+') center / cover' : ""
                 };
 
                 var item;
@@ -178,6 +178,7 @@ if ($getId) {
                   }
                 }
 
+                
                 var oldprice = this.props.oldprice;				
 				        if(this.props.oldprice && parseInt(this.props.oldprice) > 0){
                   			oldprice = (<span className="number home-activities__old-price" > <span className="home-activities__number">{oldprice} </span>{this.props.currency} </span>);
@@ -185,6 +186,7 @@ if ($getId) {
 				else{
 					oldprice = ('');
 				}
+
 
 
 
@@ -222,8 +224,7 @@ if ($getId) {
 
 
 
-                if(this.props.attractionLink == ''){
-				console.log('ddddddd: ' + this.props.attractionLink);
+                if(this.props.attractionLink == ''){				
                   item = (
                       <li id={this.props.id} className="home-activities__item home-activities__item_small">
                         <a href={this.props.link} className="home-activities__image" style={mainStyle} >
@@ -510,22 +511,7 @@ if ($getId) {
                 var cooperationImage = '';
 
                 jQuery('.home-second-menu__item_cop').removeClass('active');
-                Cooperations.map(function (el, index) {
-                  if(el.name == e.target.text){
-                    cooperationImage = el.image;
-                    jQuery(jQuery('.home-second-menu__item_cop')[index]).addClass('active');
-                  }
-                });
-
-                this.setState({
-                  searchList: newActivities,
-                  price: 'any',
-                  tag: 'any',
-                  category: 'any',
-                  region: 'any',
-                  cooperation: true,
-                  cooperationImage: cooperationImage
-                });
+          
 
               },
               openSelect: function (event) {
@@ -568,527 +554,9 @@ if ($getId) {
               },
               markerSearch: function (name) {
 
-                var newActivities = Activities.filter(function (el) {
-                  return name === el.guide;
-                });
-
-                this.setState({
-                  searchList: newActivities,
-                  price: 'any',
-                  tag: 'any',
-                  category: 'any',
-                  region: 'any',
-                  cooperation: false,
-                  cooperationImage: '',
-                  updateMap : false
-                });
+             
               },
-              componentDidUpdate: function () {
-                var localThis = this;
-
-                if(this.state.updateMap){
-                  function addYourLocationButton(map, marker) {
-                    var controlDiv = document.createElement('div');
-
-                    var firstChild = document.createElement('button');
-                    firstChild.style.backgroundColor = '#fff';
-                    firstChild.style.border = 'none';
-                    firstChild.style.outline = 'none';
-                    firstChild.style.width = '28px';
-                    firstChild.style.height = '28px';
-                    firstChild.style.borderRadius = '2px';
-                    firstChild.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)';
-                    firstChild.style.cursor = 'pointer';
-                    firstChild.style.marginRight = '10px';
-                    firstChild.style.padding = '0px';
-                    firstChild.title = 'Your Location';
-                    controlDiv.appendChild(firstChild);
-
-                    var secondChild = document.createElement('div');
-                    secondChild.style.margin = '5px';
-                    secondChild.style.width = '18px';
-                    secondChild.style.height = '18px';
-                    secondChild.style.backgroundImage = 'url(https://maps.gstatic.com/tactile/mylocation/mylocation-sprite-1x.png)';
-                    secondChild.style.backgroundSize = '180px 18px';
-                    secondChild.style.backgroundPosition = '0px 0px';
-                    secondChild.style.backgroundRepeat = 'no-repeat';
-                    secondChild.id = 'you_location_img';
-                    firstChild.appendChild(secondChild);
-
-                    google.maps.event.addListener(map, 'dragend', function() {
-                      jQuery('#you_location_img').css('background-position', '0px 0px');
-                    });
-
-                    firstChild.addEventListener('click', function() {
-                      var imgX = '0';
-                      var animationInterval = setInterval(function(){
-                        if(imgX == '-18') imgX = '0';
-                        else imgX = '-18';
-                        jQuery('#you_location_img').css('background-position', imgX+'px 0px');
-                      }, 500);
-                      if(navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(function(position) {
-                          var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                          marker.setPosition(latlng);
-                          map.setCenter(latlng);
-                          clearInterval(animationInterval);
-                          jQuery('#you_location_img').css('background-position', '-144px 0px');
-                        });
-                      }
-                      else{
-                        clearInterval(animationInterval);
-                        jQuery('#you_location_img').css('background-position', '0px 0px');
-                      }
-                    });
-
-                    controlDiv.index = 1;
-                    map.controls[google.maps.ControlPosition.RIGHT_TOP].push(controlDiv);
-                  }
-
-                  function initMap() {
-
-                    var map = new google.maps.Map(document.getElementById('map'), {
-                      zoom: 8,
-                      center: {
-                        lat: 32.77009956632245,
-                        lng: 35.00244140625
-                      },
-                      zoomControl: true,
-                      zoomControlOptions: {
-                        position: google.maps.ControlPosition.RIGHT_TOP
-                      },
-                      streetViewControl: false,
-                      streetViewControlOptions: {
-                        position: google.maps.ControlPosition.RIGHT_TOP
-                      },
-                      fullscreenControl: false,
-                      styles: [
-                        {
-                          "featureType": "administrative.country",
-                          "elementType": "labels.text",
-                          "stylers": [
-                            {
-                              "lightness": "29"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "administrative.province",
-                          "elementType": "labels.text.fill",
-                          "stylers": [
-                            {
-                              "lightness": "-12"
-                            },
-                            {
-                              "color": "#796340"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "administrative.locality",
-                          "elementType": "labels.text.fill",
-                          "stylers": [
-                            {
-                              "lightness": "15"
-                            },
-                            {
-                              "saturation": "15"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "landscape.man_made",
-                          "elementType": "geometry",
-                          "stylers": [
-                            {
-                              "visibility": "on"
-                            },
-                            {
-                              "color": "#fbf5ed"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "landscape.natural",
-                          "elementType": "geometry",
-                          "stylers": [
-                            {
-                              "visibility": "on"
-                            },
-                            {
-                              "color": "#fbf5ed"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "poi",
-                          "elementType": "labels",
-                          "stylers": [
-                            {
-                              "visibility": "off"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "poi.attraction",
-                          "elementType": "all",
-                          "stylers": [
-                            {
-                              "visibility": "on"
-                            },
-                            {
-                              "lightness": "30"
-                            },
-                            {
-                              "saturation": "-41"
-                            },
-                            {
-                              "gamma": "0.84"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "poi.attraction",
-                          "elementType": "labels",
-                          "stylers": [
-                            {
-                              "visibility": "on"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "poi.business",
-                          "elementType": "all",
-                          "stylers": [
-                            {
-                              "visibility": "off"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "poi.business",
-                          "elementType": "labels",
-                          "stylers": [
-                            {
-                              "visibility": "off"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "poi.medical",
-                          "elementType": "geometry",
-                          "stylers": [
-                            {
-                              "color": "#fbd3da"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "poi.medical",
-                          "elementType": "labels",
-                          "stylers": [
-                            {
-                              "visibility": "on"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "poi.park",
-                          "elementType": "geometry",
-                          "stylers": [
-                            {
-                              "color": "#b0e9ac"
-                            },
-                            {
-                              "visibility": "on"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "poi.park",
-                          "elementType": "labels",
-                          "stylers": [
-                            {
-                              "visibility": "on"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "poi.park",
-                          "elementType": "labels.text.fill",
-                          "stylers": [
-                            {
-                              "hue": "#68ff00"
-                            },
-                            {
-                              "lightness": "-24"
-                            },
-                            {
-                              "gamma": "1.59"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "poi.sports_complex",
-                          "elementType": "all",
-                          "stylers": [
-                            {
-                              "visibility": "on"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "poi.sports_complex",
-                          "elementType": "geometry",
-                          "stylers": [
-                            {
-                              "saturation": "10"
-                            },
-                            {
-                              "color": "#c3eb9a"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "road",
-                          "elementType": "geometry.stroke",
-                          "stylers": [
-                            {
-                              "visibility": "on"
-                            },
-                            {
-                              "lightness": "30"
-                            },
-                            {
-                              "color": "#e7ded6"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "road",
-                          "elementType": "labels",
-                          "stylers": [
-                            {
-                              "visibility": "on"
-                            },
-                            {
-                              "saturation": "-39"
-                            },
-                            {
-                              "lightness": "28"
-                            },
-                            {
-                              "gamma": "0.86"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "road.highway",
-                          "elementType": "geometry.fill",
-                          "stylers": [
-                            {
-                              "color": "#ffe523"
-                            },
-                            {
-                              "visibility": "on"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "road.highway",
-                          "elementType": "geometry.stroke",
-                          "stylers": [
-                            {
-                              "visibility": "on"
-                            },
-                            {
-                              "saturation": "0"
-                            },
-                            {
-                              "gamma": "1.44"
-                            },
-                            {
-                              "color": "#fbc28b"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "road.highway",
-                          "elementType": "labels",
-                          "stylers": [
-                            {
-                              "visibility": "on"
-                            },
-                            {
-                              "saturation": "-40"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "road.arterial",
-                          "elementType": "geometry",
-                          "stylers": [
-                            {
-                              "color": "#fed7a5"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "road.arterial",
-                          "elementType": "geometry.fill",
-                          "stylers": [
-                            {
-                              "visibility": "on"
-                            },
-                            {
-                              "gamma": "1.54"
-                            },
-                            {
-                              "color": "#fbe38b"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "road.local",
-                          "elementType": "geometry.fill",
-                          "stylers": [
-                            {
-                              "color": "#ffffff"
-                            },
-                            {
-                              "visibility": "on"
-                            },
-                            {
-                              "gamma": "2.62"
-                            },
-                            {
-                              "lightness": "10"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "road.local",
-                          "elementType": "geometry.stroke",
-                          "stylers": [
-                            {
-                              "visibility": "on"
-                            },
-                            {
-                              "weight": "0.50"
-                            },
-                            {
-                              "gamma": "1.04"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "transit.station.airport",
-                          "elementType": "geometry.fill",
-                          "stylers": [
-                            {
-                              "color": "#dee3fb"
-                            }
-                          ]
-                        },
-                        {
-                          "featureType": "water",
-                          "elementType": "geometry",
-                          "stylers": [
-                            {
-                              "saturation": "46"
-                            },
-                            {
-                              "color": "#a4e1ff"
-                            }
-                          ]
-                        }
-                      ]
-                    });
-
-                    var infoWindows = [];
-                    var markers = locations.map(function(location, i) {
-                      var icon = {
-                        url: location.icon,
-                      };
-                      var infoWindow = new google.maps.InfoWindow({
-                        name: location.guide,
-                        content: '<div class="map-window">'+
-                        '<div class="map-window__image" style="background: url('+location.image+') center / cover"></div>'+
-                        '<h1 class="map-window__title">'+location.guide+'</h1>'+
-                        '</div>'
-                      });
-                      infoWindows.push(infoWindow);
-                      return new google.maps.Marker({
-                        position: location,
-                        icon: icon
-                      });
-                    });
-
-                    markers.map(function (el, index) {
-                      el.addListener('click', function() {
-                        map.setZoom(12);
-                        map.setCenter(el.getPosition());
-                        infoWindows[index].open(map, el);
-                        localThis.markerSearch(infoWindows[index].name);
-                      });
-                    });
-
-                    addYourLocationButton(map, markers[0]);
-
-
-                    var bounds = new google.maps.LatLngBounds();
-                    for (var i = 0; i < markers.length; i++) {
-                      bounds.extend(markers[i].getPosition());
-                    }
-
-                    if( markers.length == 1 ) {
-                      map.setCenter( bounds.getCenter() );
-                      map.setZoom( 8 );
-                    }
-                    else {
-                      map.fitBounds( bounds );
-                    }
-
-                    var mcOptions = {
-                      styles:[{
-                        url: document.location.origin+'/wp-content/themes/israelispot/img/m1.svg',
-                        width: 64,
-                        height: 64,
-                        textSize: 16,
-                        textColor:"#fc4457"
-                      }]
-
-                    };
-                    var markerCluster = new MarkerClusterer(map, markers, mcOptions);
-                  }
-
-                  var locations = [];
-                  this.state.searchList.map(function (el) {
-                    locations.push({
-                      lat: Number(el.lat),
-                      lng: Number(el.lng),
-                      icon: el.mainCategoryIcon,
-                      guide: el.guide,
-                      image: el.subImage
-                    });
-                  });
-
-                  locations = _.uniqBy(locations, 'guide');
-
-                  initMap();
-                }
-
-                if(this.state.cooperation || !this.state.updateMap) {
-                  var defaultPrice = '<?php pll_e('Any price'); ?>';
-                  var defaultCategory = '<?php pll_e('Any category'); ?>';
-                  var defaultTag = '<?php pll_e('Any tag'); ?>';
-                  var defaultRegion = '<?php pll_e('Any region'); ?>';
-                  jQuery('.selects__main_price span').text(defaultPrice);
-                  jQuery('.selects__main_tag span').text(defaultTag);
-                  jQuery('.selects__main_category span').text(defaultCategory);
-                  jQuery('.selects__main_region span').text(defaultRegion);
-                }
-              },
+            
               componentDidMount: function () {
                 var localThis = this;
 
@@ -1606,7 +1074,7 @@ if ($getId) {
                 //     console.log(index+'-----------------------------');
                 // });
 
-                initMap();
+                //initMap();
 
                 if(this.state.cooperation) {
                   var defaultPrice = '<?php pll_e('Any price'); ?>';
@@ -1860,7 +1328,18 @@ if ($getId) {
                             }
                           </ul>
                         </div>
-                      </div>                      
+                      </div>
+                      
+                      
+                      <section className="banner_miotix">
+                          {
+                            bannerImages.map(function (el, index) {
+                              return(
+                                  <a href={bannerLinks[index]} target="_blank" className="banner__image" style={el}></a>
+                              )
+                            })
+                          }
+                        </section>
                     </main>
                 )
               }

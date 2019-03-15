@@ -11,7 +11,6 @@
  *
  * @package Israelispot
  */
-
 get_header();
 if(get_locale() == 'en_GB') {
     $direction = 'right';

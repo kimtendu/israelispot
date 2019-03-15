@@ -28,7 +28,7 @@ $image_id = get_field('404_image', 'options')['id'];
             <?php
             $args = array(
                 'numberposts'   => -1,
-                'post_type'        => 'activity',
+                'post_type'        => 'product',
             );
 
             $allPosts = get_posts( $args );

@@ -115,7 +115,7 @@ while ( have_posts() ) : the_post(); $this_id = get_the_ID(); ?>
             <?php
             $args = array(
                 'numberposts'   => -1,
-                'post_type'        => 'activity',
+                'post_type'        => 'product',
             );
 
             $allPosts = get_posts( $args );

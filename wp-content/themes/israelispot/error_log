@@ -1,0 +1,9 @@
+[10-Jul-2018 23:06:39 America/Denver] PHP Fatal error:  Call to undefined function get_locale() in /home/langedit/public_html/israelispot/wp-content/themes/israelispot/footer.php on line 11
+[10-Jul-2018 23:06:39 America/Denver] PHP Fatal error:  Call to undefined function get_locale() in /home/langedit/public_html/israelispot/wp-content/themes/israelispot/header.php on line 2
+[10-Jul-2018 23:06:39 America/Denver] PHP Fatal error:  Call to undefined function get_header() in /home/langedit/public_html/israelispot/wp-content/themes/israelispot/index.php on line 15
+[22-Aug-2018 03:04:02 America/Denver] PHP Fatal error:  Call to undefined function get_locale() in /home/langedit/public_html/israelispot/wp-content/themes/israelispot/footer.php on line 11
+[22-Aug-2018 03:04:02 America/Denver] PHP Fatal error:  Call to undefined function get_locale() in /home/langedit/public_html/israelispot/wp-content/themes/israelispot/header.php on line 2
+[22-Aug-2018 03:04:03 America/Denver] PHP Fatal error:  Call to undefined function get_header() in /home/langedit/public_html/israelispot/wp-content/themes/israelispot/index.php on line 15
+[22-Nov-2018 20:39:58 America/Denver] PHP Fatal error:  Call to undefined function get_locale() in /home/langedit/public_html/israelispot/wp-content/themes/israelispot/footer.php on line 11
+[22-Nov-2018 20:39:58 America/Denver] PHP Fatal error:  Call to undefined function get_locale() in /home/langedit/public_html/israelispot/wp-content/themes/israelispot/header.php on line 2
+[22-Nov-2018 20:39:59 America/Denver] PHP Fatal error:  Call to undefined function get_header() in /home/langedit/public_html/israelispot/wp-content/themes/israelispot/index.php on line 15

@@ -42,7 +42,7 @@ $this_id = get_the_ID();
             <?php
             $args = array(
                 'numberposts'   => 50,
-                'post_type'        => 'activity',
+                'post_type'        => 'product',
 				'posts_per_page' => 6,
 				'post_status' => 'publish'
             );
@@ -408,7 +408,7 @@ $this_id = get_the_ID();
                             </a>
                             <section class="home-activities__content">
                                 <h2><a href="<?php echo $post->guid; ?>" class="home-activities__title"><?php echo $post->post_title; ?></a></h2>
-                                <div class="home-activities__subtitle"><?php echo get_the_excerpt($post); ?></div>
+                                <div class="home-activities__subtitle"><?php echo wp_trim_words(get_the_excerpt($post),15, '...') ?></div>
                             </section>
                             <section class="home-activities__bottom">
                                 <section class="home-activities__rating">
@@ -509,12 +509,13 @@ $this_id = get_the_ID();
                     </a>
                     <h2 class="home-blog__subtitle">
                         <span><?php echo get_the_date('d M, Y') ?></span>
-                        <?php if($mainCategory) : echo ' - '; ?>
-                            <a href="<?php echo get_term_link($mainCategory); ?>"><?php echo $mainCategory->name; ?></a>
-                        <?php endif; ?>
+<!--                        --><?php //if($mainCategory) : echo ' - '; ?>
+<!--                            <a href="--><?php //echo get_term_link($mainCategory); ?><!--">--><?php //echo $mainCategory->name; ?><!--</a>-->
+<!--                        --><?php //endif; ?>
                     </h2>
                 </li>
             <?php endforeach; ?>
+
         </ul>
         <a href="<?php echo get_post_type_archive_link('blog')?>" class="home-activities__more"><?php pll_e('Read more'); ?> <i class="fa fa-sort-desc" aria-hidden="true"></i></a>
     </div>

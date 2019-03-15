@@ -29,6 +29,8 @@ while ( have_posts() ) : the_post(); ?>
 <main class="activity-body">
     <div class="activity">
         <div class="wrap wrap_home wrap_activity">
+           
+           
             <section class="activity__main">
                 <?php
                 $thumbnail_id = get_post_thumbnail_id( $ID );
@@ -146,6 +148,7 @@ while ( have_posts() ) : the_post(); ?>
                         <?php endif;?>
                     </section>
                     <?php endif; ?>
+					
                     <a data-id="<?php echo $post->ID; ?>"
                        data-type="now"
                        href="<?php echo $customerSiteUrl ?>"
@@ -266,6 +269,8 @@ while ( have_posts() ) : the_post(); ?>
         </div>
     </div>
     <div class="wrap wrap_home">
+       
+       
         <section class="activity-content">
             <a href="#all_comments" class="link link_recommendations">
                 <div class="link__image">
@@ -330,6 +335,8 @@ while ( have_posts() ) : the_post(); ?>
             </section>
             <?php endforeach; ?>
         </section>
+        
+        
         <section class="activity-content">
             <?php
             $defaults = array(
